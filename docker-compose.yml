@@ -1,0 +1,163 @@
+services:
+  api-gateway:
+    build:
+      context: ../InnoApiGatewayService
+      dockerfile: Dockerfile
+    container_name: api-gateway
+    env_file:
+      - .env.docker
+    ports:
+      - "${API_GATEWAY_PORT}:8080"
+    environment:
+      SPRING_APPLICATION_NAME: ${SPRING_APPLICATION_NAME}
+      SERVER_PORT: ${SERVER_PORT}
+      TOKEN_PREFIX: ${TOKEN_PREFIX}
+      AUTH_WHITELIST_PATHS: ${AUTH_WHITELIST_PATHS}
+      HEADER_USER_ID: ${HEADER_USER_ID}
+      CONTENT_TYPE_JSON: ${CONTENT_TYPE_JSON}
+      AUTH_SERVICE_URI: ${AUTH_SERVICE_URI}
+      USER_SERVICE_URI: ${USER_SERVICE_URI}
+      ORDER_SERVICE_URI: ${ORDER_SERVICE_URI}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRATION: ${JWT_EXPIRATION}
+      JWT_HEADER: ${JWT_HEADER}
+      JWT_TOKEN_PREFIX: ${JWT_TOKEN_PREFIX}
+      JWT_ROLE_PREFIX: ${JWT_ROLE_PREFIX}
+    depends_on:
+      - auth-service
+      - user-service
+      - order-service
+    networks:
+      - innonetwork
+
+  auth-service:
+    build:
+      context: ../InnoAuthService
+      dockerfile: Dockerfile
+    container_name: auth-service
+    env_file:
+      - .env.docker
+    ports:
+      - "${AUTH_SERVICE_PORT}:8081"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://${AUTH_DB_HOST}:${AUTH_DB_PORT}/${AUTH_DB_NAME}
+      SPRING_DATASOURCE_USERNAME: ${AUTH_DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${AUTH_DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRATION: ${JWT_EXPIRATION}
+      JWT_HEADER: ${JWT_HEADER}
+      JWT_TOKEN_PREFIX: ${JWT_TOKEN_PREFIX}
+      JWT_ROLE_PREFIX: ${JWT_ROLE_PREFIX}
+      SERVER_PORT: 8081
+    depends_on:
+      - postgres_auth
+    networks:
+      - innonetwork
+
+  user-service:
+    build:
+      context: ../InnoUserService
+      dockerfile: Dockerfile
+    container_name: user-service
+    env_file:
+      - .env.docker
+    ports:
+      - "${USER_SERVICE_PORT}:8082"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://${USER_DB_HOST}:${USER_DB_PORT}/${USER_DB_NAME}
+      SPRING_DATASOURCE_USERNAME: ${USER_DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${USER_DB_PASSWORD}
+      SPRING_REDIS_HOST: redis
+      SPRING_REDIS_PORT: 6379
+      SERVER_PORT: 8082
+    depends_on:
+      - postgres_user
+      - redis
+    networks:
+      - innonetwork
+
+  order-service:
+    build:
+      context: ../InnoOrderService
+      dockerfile: Dockerfile
+    container_name: order-service
+    env_file:
+      - .env.docker
+    ports:
+      - "${ORDER_SERVICE_PORT}:8086"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://${ORDER_DB_HOST}:${ORDER_DB_PORT}/${ORDER_DB_NAME}
+      SPRING_DATASOURCE_USERNAME: ${ORDER_DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${ORDER_DB_PASSWORD}
+      SERVER_PORT: 8086
+    depends_on:
+      - postgres_order
+    networks:
+      - innonetwork
+
+  postgres_auth:
+    image: postgres:15
+    container_name: postgres_auth
+    env_file:
+      - .env.docker
+    environment:
+      POSTGRES_DB: ${AUTH_DB_NAME}
+      POSTGRES_USER: ${AUTH_DB_USERNAME}
+      POSTGRES_PASSWORD: ${AUTH_DB_PASSWORD}
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_auth_data:/var/lib/postgresql/data
+    networks:
+      - innonetwork
+
+  postgres_user:
+    image: postgres:15
+    container_name: postgres_user
+    env_file:
+      - .env.docker
+    environment:
+      POSTGRES_DB: ${USER_DB_NAME}
+      POSTGRES_USER: ${USER_DB_USERNAME}
+      POSTGRES_PASSWORD: ${USER_DB_PASSWORD}
+    ports:
+      - "5434:5432"
+    volumes:
+      - postgres_user_data:/var/lib/postgresql/data
+    networks:
+      - innonetwork
+
+  postgres_order:
+    image: postgres:15
+    container_name: postgres_order
+    env_file:
+      - .env.docker
+    environment:
+      POSTGRES_DB: ${ORDER_DB_NAME}
+      POSTGRES_USER: ${ORDER_DB_USERNAME}
+      POSTGRES_PASSWORD: ${ORDER_DB_PASSWORD}
+    ports:
+      - "5435:5432"
+    volumes:
+      - postgres_order_data:/var/lib/postgresql/data
+    networks:
+      - innonetwork
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    env_file:
+      - .env.docker
+    ports:
+      - "6379:6379"
+    networks:
+      - innonetwork
+
+networks:
+  innonetwork:
+    driver: bridge
+
+volumes:
+  postgres_auth_data:
+  postgres_user_data:
+  postgres_order_data:
