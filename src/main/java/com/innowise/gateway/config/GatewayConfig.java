@@ -6,6 +6,11 @@ import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Configuration class for defining routes in the API Gateway.
+ * <p>
+ * Maps incoming request paths to appropriate downstream microservices.
+ */
 @Configuration
 public class GatewayConfig {
 
@@ -18,6 +23,12 @@ public class GatewayConfig {
     @Value("${ORDER_SERVICE_URI}")
     private String orderServiceUri;
 
+    /**
+     * Defines route mappings for the Gateway.
+     *
+     * @param builder the route locator builder
+     * @return the configured {@link RouteLocator}
+     */
     @Bean
     public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
         return builder.routes()
