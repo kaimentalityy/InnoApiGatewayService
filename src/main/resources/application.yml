@@ -15,13 +15,16 @@ spring:
         - id: user-service
           uri: ${USER_SERVICE_URI}
           predicates:
-            - Path=/api/users/**, /api/cards/**
+            - Path=/api/users/**
+            - Path=/api/cards/**
           filters:
             - StripPrefix=1
 
         - id: order-service
           uri: ${ORDER_SERVICE_URI}
           predicates:
-            - Path=/api/orders/**, /api/items/**, /api/order-items/**
+            - Path=/api/orders/**
+            - Path=/api/items/**
+            - Path=/api/order-items/**
           filters:
             - StripPrefix=1

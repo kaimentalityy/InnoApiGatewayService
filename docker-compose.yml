@@ -1,16 +1,56 @@
 services:
+  kafka:
+    image: confluentinc/cp-kafka:7.6.0
+    container_name: kafka
+    restart: always
+    env_file: .env
+    ports:
+      - "29092:29092"
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_LISTENERS: PLAINTEXT://:29092,CONTROLLER://:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_LOG_DIRS: /var/lib/kafka/data
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      CLUSTER_ID: MkU3OEVBNTcwNTJENDM2Qk
+    volumes:
+      - kafka_data:/var/lib/kafka/data
+    networks:
+      - innonetwork
+
+  mongodb:
+    image: mongo:6
+    container_name: mongodb
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: secret
+    env_file: .env
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - innonetwork
+
   api-gateway:
     build:
-      context: ../InnoApiGatewayService
+      context: .
       dockerfile: Dockerfile
     container_name: api-gateway
-    env_file:
-      - .env.docker
+    env_file: .env
     ports:
-      - "${API_GATEWAY_PORT}:8080"
+      - "${API_GATEWAY_PORT:-8080}:8080"
     environment:
       SPRING_APPLICATION_NAME: ${SPRING_APPLICATION_NAME}
-      SERVER_PORT: ${SERVER_PORT}
+      SERVER_PORT: 8080
       TOKEN_PREFIX: ${TOKEN_PREFIX}
       AUTH_WHITELIST_PATHS: ${AUTH_WHITELIST_PATHS}
       HEADER_USER_ID: ${HEADER_USER_ID}
@@ -18,15 +58,19 @@ services:
       AUTH_SERVICE_URI: ${AUTH_SERVICE_URI}
       USER_SERVICE_URI: ${USER_SERVICE_URI}
       ORDER_SERVICE_URI: ${ORDER_SERVICE_URI}
+      PAYMENT_SERVICE_URI: ${PAYMENT_SERVICE_URI}
       JWT_SECRET: ${JWT_SECRET}
       JWT_EXPIRATION: ${JWT_EXPIRATION}
       JWT_HEADER: ${JWT_HEADER}
       JWT_TOKEN_PREFIX: ${JWT_TOKEN_PREFIX}
       JWT_ROLE_PREFIX: ${JWT_ROLE_PREFIX}
+      KAFKA_BOOTSTRAP_SERVERS: kafka:29092
     depends_on:
       - auth-service
       - user-service
       - order-service
+      - payment-service
+      - kafka
     networks:
       - innonetwork
 
@@ -35,10 +79,9 @@ services:
       context: ../InnoAuthService
       dockerfile: Dockerfile
     container_name: auth-service
-    env_file:
-      - .env.docker
+    env_file: .env
     ports:
-      - "${AUTH_SERVICE_PORT}:8081"
+      - "${AUTH_SERVICE_PORT:-8081}:8081"
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://${AUTH_DB_HOST}:${AUTH_DB_PORT}/${AUTH_DB_NAME}
       SPRING_DATASOURCE_USERNAME: ${AUTH_DB_USERNAME}
@@ -49,8 +92,14 @@ services:
       JWT_TOKEN_PREFIX: ${JWT_TOKEN_PREFIX}
       JWT_ROLE_PREFIX: ${JWT_ROLE_PREFIX}
       SERVER_PORT: 8081
+      KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+      PASSWORD_HASH_ALGORITHM: ${PASSWORD_HASH_ALGORITHM}
+      PASSWORD_SALT_ALGORITHM: ${PASSWORD_SALT_ALGORITHM}
+      PASSWORD_SALT_LENGTH: ${PASSWORD_SALT_LENGTH}
+      PASSWORD_STRENGTH: ${PASSWORD_STRENGTH}
     depends_on:
       - postgres_auth
+      - kafka
     networks:
       - innonetwork
 
@@ -59,20 +108,21 @@ services:
       context: ../InnoUserService
       dockerfile: Dockerfile
     container_name: user-service
-    env_file:
-      - .env.docker
+    env_file: .env
     ports:
-      - "${USER_SERVICE_PORT}:8082"
+      - "${USER_SERVICE_PORT:-8082}:8082"
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://${USER_DB_HOST}:${USER_DB_PORT}/${USER_DB_NAME}
       SPRING_DATASOURCE_USERNAME: ${USER_DB_USERNAME}
       SPRING_DATASOURCE_PASSWORD: ${USER_DB_PASSWORD}
-      SPRING_REDIS_HOST: redis
-      SPRING_REDIS_PORT: 6379
+      SPRING_REDIS_HOST: ${REDIS_HOST}
+      SPRING_REDIS_PORT: ${REDIS_PORT}
       SERVER_PORT: 8082
+      KAFKA_BOOTSTRAP_SERVERS: kafka:29092
     depends_on:
       - postgres_user
       - redis
+      - kafka
     networks:
       - innonetwork
 
@@ -81,29 +131,50 @@ services:
       context: ../InnoOrderService
       dockerfile: Dockerfile
     container_name: order-service
-    env_file:
-      - .env.docker
+    env_file: .env
     ports:
-      - "${ORDER_SERVICE_PORT}:8086"
+      - "${ORDER_SERVICE_PORT:-8086}:8086"
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://${ORDER_DB_HOST}:${ORDER_DB_PORT}/${ORDER_DB_NAME}
       SPRING_DATASOURCE_USERNAME: ${ORDER_DB_USERNAME}
       SPRING_DATASOURCE_PASSWORD: ${ORDER_DB_PASSWORD}
       SERVER_PORT: 8086
+      KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+      USER_SERVICE_URI: http://user-service:8082
     depends_on:
       - postgres_order
+      - kafka
+      - user-service
+    networks:
+      - innonetwork
+
+  payment-service:
+    build:
+      context: ../InnoPaymentService
+      dockerfile: Dockerfile
+    container_name: payment-service
+    env_file: .env
+    ports:
+      - "${PAYMENT_SERVICE_PORT:-8087}:8087"
+    environment:
+      SPRING_DATA_MONGODB_URI: mongodb://root:secret@mongodb:27017/${PAYMENT_DB_NAME:-payment}?authSource=admin
+      SERVER_PORT: 8087
+      KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+    depends_on:
+      - mongodb
+      - kafka
+      - order-service
     networks:
       - innonetwork
 
   postgres_auth:
     image: postgres:15
     container_name: postgres_auth
-    env_file:
-      - .env.docker
     environment:
       POSTGRES_DB: ${AUTH_DB_NAME}
       POSTGRES_USER: ${AUTH_DB_USERNAME}
       POSTGRES_PASSWORD: ${AUTH_DB_PASSWORD}
+    env_file: .env
     ports:
       - "5433:5432"
     volumes:
@@ -114,12 +185,11 @@ services:
   postgres_user:
     image: postgres:15
     container_name: postgres_user
-    env_file:
-      - .env.docker
     environment:
       POSTGRES_DB: ${USER_DB_NAME}
       POSTGRES_USER: ${USER_DB_USERNAME}
       POSTGRES_PASSWORD: ${USER_DB_PASSWORD}
+    env_file: .env
     ports:
       - "5434:5432"
     volumes:
@@ -130,12 +200,11 @@ services:
   postgres_order:
     image: postgres:15
     container_name: postgres_order
-    env_file:
-      - .env.docker
     environment:
       POSTGRES_DB: ${ORDER_DB_NAME}
       POSTGRES_USER: ${ORDER_DB_USERNAME}
       POSTGRES_PASSWORD: ${ORDER_DB_PASSWORD}
+    env_file: .env
     ports:
       - "5435:5432"
     volumes:
@@ -146,8 +215,7 @@ services:
   redis:
     image: redis:7-alpine
     container_name: redis
-    env_file:
-      - .env.docker
+    env_file: .env
     ports:
       - "6379:6379"
     networks:
@@ -161,3 +229,5 @@ volumes:
   postgres_auth_data:
   postgres_user_data:
   postgres_order_data:
+  kafka_data:
+  mongo_data:
