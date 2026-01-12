@@ -28,3 +28,47 @@ spring:
             - Path=/api/order-items/**
           filters:
             - StripPrefix=1
+
+        - id: auth-service-swagger
+          uri: ${AUTH_SERVICE_URI}
+          predicates:
+            - Path=/auth-service/v3/api-docs/**
+          filters:
+            - RewritePath=/auth-service/(?<path>.*), /$\{path}
+
+        - id: user-service-swagger
+          uri: ${USER_SERVICE_URI}
+          predicates:
+            - Path=/user-service/v3/api-docs/**
+          filters:
+            - RewritePath=/user-service/(?<path>.*), /$\{path}
+
+        - id: order-service-swagger
+          uri: ${ORDER_SERVICE_URI}
+          predicates:
+            - Path=/order-service/v3/api-docs/**
+          filters:
+            - RewritePath=/order-service/(?<path>.*), /$\{path}
+
+        - id: payment-service-swagger
+          uri: ${PAYMENT_SERVICE_URI}
+          predicates:
+            - Path=/payment-service/v3/api-docs/**
+          filters:
+            - RewritePath=/payment-service/(?<path>.*), /$\{path}
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    urls:
+      - name: Auth Service
+        url: /auth-service/v3/api-docs
+      - name: User Service
+        url: /user-service/v3/api-docs
+      - name: Order Service
+        url: /order-service/v3/api-docs
+      - name: Payment Service
+        url: /payment-service/v3/api-docs
+    server-url: http://localhost:${server.port:8080}
+  api-docs:
+    path: /v3/api-docs

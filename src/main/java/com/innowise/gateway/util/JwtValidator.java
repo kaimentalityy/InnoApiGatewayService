@@ -1,46 +1,54 @@
 package com.innowise.gateway.util;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
-import java.util.Map;
+import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
 
 /**
- * Utility component for validating JWT tokens through the Authentication Service.
+ * Utility component for validating JWT tokens locally.
  * <p>
- * Sends validation requests to the auth-service and interprets the response.
+ * Uses a shared secret key to verify the signature and validity of JWT tokens.
  */
 @Component
 public class JwtValidator {
 
-    private final WebClient webClient;
+    private final SecretKey key;
 
-    /**
-     * Constructs the JWT validator with a configured {@link WebClient}.
-     *
-     * @param webClientBuilder the builder for creating {@link WebClient} instances
-     * @param authUrl          the base URL of the authentication service
-     */
-    public JwtValidator(WebClient.Builder webClientBuilder, @Value("${spring.cloud.gateway.routes[0].uri}") String authUrl) {
-        this.webClient = webClientBuilder.baseUrl(authUrl).build();
+    public JwtValidator(@Value("${JWT_SECRET}") String secret) {
+        this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
 
     /**
-     * Validates the given JWT token by delegating the check to the authentication service.
+     * Validates the token and returns the claims if valid.
+     *
+     * @param token the JWT token
+     * @return a {@link Mono} emitting the claims if valid, or error/empty if
+     *         invalid
+     */
+    public Mono<Claims> validateAndGetClaims(String token) {
+        return Mono.fromCallable(() -> Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody());
+    }
+
+    /**
+     * Validates the given JWT token locally using the configured secret key.
      *
      * @param token the JWT token to validate
-     * @return a {@link Mono} emitting {@code true} if the token is valid, or {@code false} otherwise
+     * @return a {@link Mono} emitting {@code true} if the token is valid, or
+     *         {@code false} otherwise
      */
     public Mono<Boolean> validate(String token) {
-        return webClient.post()
-                .uri(uriBuilder -> uriBuilder.path("/api/auth/validate")
-                        .queryParam("token", token)
-                        .build())
-                .retrieve()
-                .bodyToMono(Map.class)
-                .map(map -> (Boolean) map.getOrDefault("valid", false))
-                .onErrorReturn(false);
+        return validateAndGetClaims(token)
+                .map(claims -> true)
+                .onErrorResume(e -> Mono.just(false));
     }
 }

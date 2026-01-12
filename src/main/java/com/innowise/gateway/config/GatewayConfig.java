@@ -38,6 +38,12 @@ public class GatewayConfig {
                         .uri(userServiceUri))
                 .route("auth-service", r -> r.path("/api/auth/**")
                         .uri(authServiceUri))
+                .route("swagger-ui", r -> r.path("/swagger-ui/**")
+                        .filters(f -> f.rewritePath("/swagger-ui/(?<path>.*)", "/${path}"))
+                        .uri("lb://inno-gateway"))
+                .route("api-docs", r -> r.path("/v3/api-docs/**")
+                        .filters(f -> f.rewritePath("/v3/api-docs/(?<path>.*)", "/${path}"))
+                        .uri("lb://inno-gateway"))
                 .build();
     }
 }

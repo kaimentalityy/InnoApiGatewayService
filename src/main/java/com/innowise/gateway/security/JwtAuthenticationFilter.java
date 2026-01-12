@@ -14,8 +14,10 @@ import reactor.core.publisher.Mono;
 /**
  * Global JWT authentication filter for the API Gateway.
  * <p>
- * Intercepts incoming requests and validates JWT tokens using the {@link JwtValidator}.
- * Skips authentication for public endpoints like login, registration, and token refresh.
+ * Intercepts incoming requests and validates JWT tokens using the
+ * {@link JwtValidator}.
+ * Skips authentication for public endpoints like login, registration, and token
+ * refresh.
  */
 @Slf4j
 @Component
@@ -42,27 +44,37 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         String path = exchange.getRequest().getPath().toString();
+        log.info("JwtAuthenticationFilter - Processing request for path: {}", path);
 
-        if (path.contains("/auth/login") || path.contains("/auth/register") || path.contains("/auth/refresh")) {
+        if (path.contains("/auth/login") || path.contains("/auth/register") || path.contains("/auth/refresh")
+                || path.contains("/v3/api-docs") || path.contains("/swagger-ui") || path.contains("/webjars")
+                || path.contains("/swagger-resources")) {
+            log.info("JwtAuthenticationFilter - Skipping authentication for public path: {}", path);
             return chain.filter(exchange);
         }
 
         String authHeader = exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            log.warn("JwtAuthenticationFilter - Missing or invalid Authorization header");
             exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
             return exchange.getResponse().setComplete();
         }
 
-        String token = authHeader.substring(7);
-        return jwtValidator.validate(token)
-                .flatMap(isValid -> {
-                    if (isValid) {
-                        return chain.filter(exchange);
-                    } else {
-                        exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-                        return exchange.getResponse().setComplete();
-                    }
+        String authHeader1 = exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
+        String token = authHeader1.substring(7);
+
+        return jwtValidator.validateAndGetClaims(token)
+                .flatMap(claims -> {
+                    log.info("JwtAuthenticationFilter - Token valid, subject: {}", claims.getSubject());
+
+                    var request = exchange.getRequest().mutate()
+                            .header("Authorization", "Bearer " + token)
+                            .header("X-User-Id", claims.getSubject())
+                            .build();
+
+                    return chain.filter(exchange.mutate().request(request).build());
                 });
+
     }
 
     /**
