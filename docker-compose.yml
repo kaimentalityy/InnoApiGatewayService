@@ -34,7 +34,6 @@ services:
       timeout: 5s
       retries: 5
 
-
   mongodb:
     image: mongo:6
     container_name: mongodb
@@ -50,7 +49,7 @@ services:
     networks:
       - ${DOCKER_NETWORK_NAME:-innonetwork}
     healthcheck:
-      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      test: [ "CMD", "mongosh", "--eval", "db.adminCommand('ping')" ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -80,7 +79,7 @@ services:
       JWT_TOKEN_PREFIX: ${JWT_TOKEN_PREFIX}
       JWT_ROLE_PREFIX: ${JWT_ROLE_PREFIX}
       KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_BOOTSTRAP_SERVERS}
-      # Added Random API Config here in case Gateway acts as proxy
+
       RANDOM_API_BASE_URL: ${RANDOM_API_BASE_URL}
     depends_on:
       kafka:
@@ -173,6 +172,8 @@ services:
       KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_BOOTSTRAP_SERVERS}
       KAFKA_ORDER_EVENTS_TOPIC: ${KAFKA_ORDER_EVENTS_TOPIC:-order-events}
       USER_SERVICE_URI: ${USER_SERVICE_URI}
+      SPRING_REDIS_HOST: ${REDIS_HOST}
+      SPRING_REDIS_PORT: ${REDIS_PORT}
     depends_on:
       postgres_order:
         condition: service_healthy
@@ -228,7 +229,7 @@ services:
     networks:
       - ${DOCKER_NETWORK_NAME:-innonetwork}
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${AUTH_DB_USERNAME} -d ${AUTH_DB_NAME}"]
+      test: [ "CMD-SHELL", "pg_isready -U ${AUTH_DB_USERNAME} -d ${AUTH_DB_NAME}" ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -249,7 +250,7 @@ services:
     networks:
       - ${DOCKER_NETWORK_NAME:-innonetwork}
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${USER_DB_USERNAME} -d ${USER_DB_NAME}"]
+      test: [ "CMD-SHELL", "pg_isready -U ${USER_DB_USERNAME} -d ${USER_DB_NAME}" ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -270,7 +271,7 @@ services:
     networks:
       - ${DOCKER_NETWORK_NAME:-innonetwork}
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${ORDER_DB_USERNAME} -d ${ORDER_DB_NAME}"]
+      test: [ "CMD-SHELL", "pg_isready -U ${ORDER_DB_USERNAME} -d ${ORDER_DB_NAME}" ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -291,7 +292,7 @@ services:
     networks:
       - ${DOCKER_NETWORK_NAME:-innonetwork}
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${PAYMENT_DB_USERNAME} -d ${PAYMENT_DB_NAME}"]
+      test: [ "CMD-SHELL", "pg_isready -U ${PAYMENT_DB_USERNAME} -d ${PAYMENT_DB_NAME}" ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -308,7 +309,7 @@ services:
     volumes:
       - redis_data:/data
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test: [ "CMD", "redis-cli", "ping" ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -332,6 +333,90 @@ services:
     networks:
       - ${DOCKER_NETWORK_NAME:-innonetwork}
 
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    restart: always
+    ports:
+      - "${PROMETHEUS_PORT:-9091}:9091"
+    volumes:
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--web.enable-lifecycle'
+      - '--web.listen-address=:9091'
+    networks:
+      - ${DOCKER_NETWORK_NAME:-innonetwork}
+    healthcheck:
+      test: [ "CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:9091/-/healthy" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  loki:
+    image: grafana/loki:latest
+    container_name: loki
+    user: "root"
+    restart: always
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./monitoring/loki/loki-config.yml:/etc/loki/local-config.yaml
+      - loki_data:/loki
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - ${DOCKER_NETWORK_NAME:-innonetwork}
+
+  tempo:
+    image: grafana/tempo:latest
+    container_name: tempo
+    user: "root"
+    restart: always
+    ports:
+      - "3200:3200"
+      - "4317:4317"
+      - "4318:4318"
+      - "9411:9411"
+    volumes:
+      - ./monitoring/tempo/tempo.yml:/etc/tempo.yaml
+      - tempo_data:/tmp/tempo
+    command: [ "-config.file=/etc/tempo.yaml" ]
+    networks:
+      - ${DOCKER_NETWORK_NAME:-innonetwork}
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards
+      - grafana_data:/var/lib/grafana
+    networks:
+      - ${DOCKER_NETWORK_NAME:-innonetwork}
+    depends_on:
+      prometheus:
+        condition: service_healthy
+      loki:
+        condition: service_started
+      tempo:
+        condition: service_started
+    healthcheck:
+      test: [ "CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/api/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
 networks:
   innonetwork:
     driver: bridge
@@ -346,3 +431,7 @@ volumes:
   mongo_data:
   minikube_data:
   redis_data:
+  prometheus_data:
+  loki_data:
+  tempo_data:
+  grafana_data:

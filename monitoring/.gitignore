@@ -1,0 +1,4 @@
+# Ignore monitoring data directories (these are mounted as volumes)
+*/data/
+*.db
+*.wal

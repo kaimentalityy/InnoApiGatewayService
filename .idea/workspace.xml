@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="7135a0cd-6705-4616-9eb7-a2074e53755a" name="Changes" comment="fixed dotenv file for new services, added kafka and fixed issues in security config">
+      <change afterPath="$PROJECT_DIR$/.idea/checkstyle-idea.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/monitoring/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/monitoring/grafana/dashboards/microservices-monitoring.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/monitoring/grafana/provisioning/dashboards/dashboards.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/monitoring/grafana/provisioning/datasources/datasources.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/monitoring/loki/loki-config.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/monitoring/prometheus/prometheus.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/monitoring/tempo/tempo.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/innowise/gateway/config/MetricsConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/innowise/gateway/security/JwtAuthenticationFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/innowise/gateway/security/JwtAuthenticationFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+        <option value="Dockerfile" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;kaimentalityy&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/kaimentalityy/InnoApiGatewayService.git&quot;,
+    &quot;accountId&quot;: &quot;28ac52c3-b5fd-4011-94ab-73d19a5d6ed2&quot;
+  }
+}</component>
+  <component name="KubernetesApiPersistence">{}</component>
+  <component name="KubernetesApiProvider">{
+  &quot;isMigrated&quot;: true
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 6
+}</component>
+  <component name="ProjectId" id="34kkJHphwbVLN8TF8k4swyv7x0M" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Docker.docker-compose.yml.order-service: Compose Deployment.executor&quot;: &quot;Run&quot;,
+    &quot;Docker.docker-compose.yml.postgres_order: Compose Deployment.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.InnoApiGatewayService [clean,compile].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.InnoApiGatewayService [clean,package].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.InnoApiGatewayService [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.InnoApiGatewayService [install].executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;Spring Boot.InnoGatewayApplication.executor&quot;: &quot;Run&quot;,
+    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;tasks/GTW-0&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/kai/IdeaProjects/InnoProjects&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;onboarding.tips.debug.path&quot;: &quot;/home/kai/IdeaProjects/InnoApiGatewayService/src/main/java/com/innowise/Main.java&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="mvn clean" />
+      <command value="mvn clean compile" />
+      <command value="mvn install" />
+    </option>
+  </component>
+  <component name="RunManager" selected="Docker.docker-compose.yml.postgres_order: Compose Deployment">
+    <configuration name="InnoGatewayApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="InnoApiGatewayService" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.innowise.gateway.InnoGatewayApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="docker-deploy" factoryName="docker-compose.yml" temporary="true">
+      <deployment type="docker-compose.yml">
+        <settings />
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <configuration name="docker-compose.yml.order-service: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
+      <deployment type="docker-compose.yml">
+        <settings>
+          <option name="services">
+            <list>
+              <option value="order-service" />
+            </list>
+          </option>
+          <option name="sourceFilePath" value="docker-compose.yml" />
+        </settings>
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <configuration name="docker-compose.yml.postgres_order: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
+      <deployment type="docker-compose.yml">
+        <settings>
+          <option name="services">
+            <list>
+              <option value="postgres_order" />
+            </list>
+          </option>
+          <option name="sourceFilePath" value="docker-compose.yml" />
+        </settings>
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Docker.docker-compose.yml.postgres_order: Compose Deployment" />
+        <item itemvalue="Docker.docker-compose.yml.order-service: Compose Deployment" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-30f59d01ecdd-26cb7f24e5b0-intellij.indexing.shared.core-IU-253.29346.240" />
+        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-IU-253.29346.240" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="7135a0cd-6705-4616-9eb7-a2074e53755a" name="Changes" comment="" />
+      <created>1761764885427</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1761764885427</updated>
+      <workItem from="1761764886504" duration="1298000" />
+      <workItem from="1761837140620" duration="4909000" />
+      <workItem from="1761860276774" duration="1907000" />
+      <workItem from="1761925489294" duration="1930000" />
+      <workItem from="1761928003719" duration="819000" />
+      <workItem from="1761929676529" duration="3394000" />
+      <workItem from="1762008551865" duration="3061000" />
+      <workItem from="1762036932958" duration="1257000" />
+      <workItem from="1762106975056" duration="13601000" />
+      <workItem from="1762165611362" duration="26000" />
+      <workItem from="1762165653905" duration="1676000" />
+      <workItem from="1762535670262" duration="65000" />
+      <workItem from="1762953847157" duration="3153000" />
+      <workItem from="1762962909920" duration="3146000" />
+      <workItem from="1762984226454" duration="599000" />
+      <workItem from="1763035989831" duration="3772000" />
+      <workItem from="1763051126421" duration="915000" />
+      <workItem from="1763217762441" duration="605000" />
+      <workItem from="1763233195109" duration="605000" />
+      <workItem from="1763243068425" duration="3768000" />
+      <workItem from="1763334466186" duration="611000" />
+      <workItem from="1763370800958" duration="1856000" />
+      <workItem from="1763393369844" duration="4456000" />
+      <workItem from="1763483073773" duration="6000" />
+      <workItem from="1763484609542" duration="2513000" />
+      <workItem from="1763491367844" duration="5121000" />
+      <workItem from="1763548679086" duration="4608000" />
+      <workItem from="1763566293116" duration="9000" />
+      <workItem from="1763834329092" duration="14000" />
+      <workItem from="1763834623868" duration="178000" />
+      <workItem from="1763912084213" duration="437000" />
+      <workItem from="1763912947654" duration="1676000" />
+      <workItem from="1763915463264" duration="3000" />
+      <workItem from="1763921293708" duration="13000" />
+      <workItem from="1763922116766" duration="103000" />
+      <workItem from="1763923115131" duration="16000" />
+      <workItem from="1763923467907" duration="11000" />
+      <workItem from="1764069670142" duration="1001000" />
+      <workItem from="1764087049966" duration="162000" />
+      <workItem from="1764087236028" duration="2000" />
+      <workItem from="1764087246029" duration="812000" />
+      <workItem from="1764095324088" duration="8618000" />
+      <workItem from="1764173805581" duration="632000" />
+      <workItem from="1764269980436" duration="2824000" />
+      <workItem from="1764273505056" duration="28000" />
+      <workItem from="1764273544677" duration="747000" />
+      <workItem from="1764321586214" duration="310000" />
+      <workItem from="1764322012378" duration="2266000" />
+      <workItem from="1764414703552" duration="1356000" />
+      <workItem from="1764421846360" duration="155000" />
+      <workItem from="1764444438330" duration="2757000" />
+      <workItem from="1764447585188" duration="6000" />
+      <workItem from="1764448511637" duration="3000" />
+      <workItem from="1764512659552" duration="928000" />
+      <workItem from="1764515667628" duration="5000" />
+      <workItem from="1764541071539" duration="5183000" />
+      <workItem from="1764580330959" duration="370000" />
+      <workItem from="1764598445373" duration="1658000" />
+      <workItem from="1764690869994" duration="14000" />
+      <workItem from="1764691025353" duration="20000" />
+      <workItem from="1764691602879" duration="62000" />
+      <workItem from="1765988504284" duration="64000" />
+      <workItem from="1766064518849" duration="916000" />
+      <workItem from="1766139311593" duration="1015000" />
+      <workItem from="1766141638030" duration="6831000" />
+      <workItem from="1766246934247" duration="186000" />
+      <workItem from="1766274682558" duration="117000" />
+      <workItem from="1766326649976" duration="2939000" />
+      <workItem from="1766331821209" duration="23000" />
+      <workItem from="1766388798946" duration="411000" />
+      <workItem from="1766389301399" duration="705000" />
+      <workItem from="1766392489301" duration="16000" />
+      <workItem from="1766393452810" duration="237000" />
+      <workItem from="1766394394870" duration="155000" />
+      <workItem from="1766394651297" duration="21000" />
+      <workItem from="1766494349266" duration="156000" />
+      <workItem from="1767795105875" duration="11617000" />
+      <workItem from="1767963283479" duration="239000" />
+      <workItem from="1767964029752" duration="2770000" />
+      <workItem from="1767970841752" duration="1757000" />
+      <workItem from="1767977267824" duration="5842000" />
+      <workItem from="1768146219858" duration="10830000" />
+      <workItem from="1768228005852" duration="2337000" />
+      <workItem from="1768348117767" duration="953000" />
+      <workItem from="1768350075444" duration="343000" />
+      <workItem from="1768350603762" duration="3732000" />
+      <workItem from="1768485769172" duration="327000" />
+      <workItem from="1768486597538" duration="2667000" />
+      <workItem from="1768655952511" duration="7794000" />
+      <workItem from="1768753305745" duration="2000" />
+      <workItem from="1768760965089" duration="608000" />
+      <workItem from="1768766199709" duration="3542000" />
+    </task>
+    <task id="LOCAL-00001" summary="added basic gateway implementation with error handling, security config, JwtValidator and JwtAuthenticationFilter">
+      <option name="closed" value="true" />
+      <created>1761927319331</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1761927319331</updated>
+    </task>
+    <task id="LOCAL-00002" summary="added single docker compose files, .env for every service and fixed GatewayConfig for registration flow">
+      <option name="closed" value="true" />
+      <created>1762126109342</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1762126109342</updated>
+    </task>
+    <task id="LOCAL-00003" summary="fixed dotenv file for new services, added kafka and fixed issues in security config">
+      <option name="closed" value="true" />
+      <created>1762969028934</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1762969028934</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="added basic gateway implementation with error handling, security config, JwtValidator and JwtAuthenticationFilter" />
+    <MESSAGE value="added single docker compose files, .env for every service and fixed GatewayConfig for registration flow" />
+    <MESSAGE value="fixed dotenv file for new services, added kafka and fixed issues in security config" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed dotenv file for new services, added kafka and fixed issues in security config" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../../InnoApiGatewayService/src/main/java/com/innowise/Main.java</url>
+          <line>13</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>

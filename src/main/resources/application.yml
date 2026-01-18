@@ -1,19 +1,19 @@
 spring:
   application:
-    name: ${SPRING_APPLICATION_NAME}
+    name: ${SPRING_APPLICATION_NAME:inno-api-gateway}
 
   cloud:
     gateway:
       routes:
         - id: auth-service
-          uri: ${AUTH_SERVICE_URI}
+          uri: ${AUTH_SERVICE_URI:http://auth-service:8081}
           predicates:
             - Path=/api/auth/**
           filters:
             - StripPrefix=1
 
         - id: user-service
-          uri: ${USER_SERVICE_URI}
+          uri: ${USER_SERVICE_URI:http://user-service:8082}
           predicates:
             - Path=/api/users/**
             - Path=/api/cards/**
@@ -21,7 +21,7 @@ spring:
             - StripPrefix=1
 
         - id: order-service
-          uri: ${ORDER_SERVICE_URI}
+          uri: ${ORDER_SERVICE_URI:http://order-service:8086}
           predicates:
             - Path=/api/orders/**
             - Path=/api/items/**
@@ -30,32 +30,35 @@ spring:
             - StripPrefix=1
 
         - id: auth-service-swagger
-          uri: ${AUTH_SERVICE_URI}
+          uri: ${AUTH_SERVICE_URI:http://auth-service:8081}
           predicates:
             - Path=/auth-service/v3/api-docs/**
           filters:
             - RewritePath=/auth-service/(?<path>.*), /$\{path}
 
         - id: user-service-swagger
-          uri: ${USER_SERVICE_URI}
+          uri: ${USER_SERVICE_URI:http://user-service:8082}
           predicates:
             - Path=/user-service/v3/api-docs/**
           filters:
             - RewritePath=/user-service/(?<path>.*), /$\{path}
 
         - id: order-service-swagger
-          uri: ${ORDER_SERVICE_URI}
+          uri: ${ORDER_SERVICE_URI:http://order-service:8086}
           predicates:
             - Path=/order-service/v3/api-docs/**
           filters:
             - RewritePath=/order-service/(?<path>.*), /$\{path}
 
         - id: payment-service-swagger
-          uri: ${PAYMENT_SERVICE_URI}
+          uri: ${PAYMENT_SERVICE_URI:http://payment-service:8087}
           predicates:
             - Path=/payment-service/v3/api-docs/**
           filters:
             - RewritePath=/payment-service/(?<path>.*), /$\{path}
+
+jwt:
+  secret: ${JWT_SECRET}
 
 springdoc:
   swagger-ui:
@@ -69,6 +72,30 @@ springdoc:
         url: /order-service/v3/api-docs
       - name: Payment Service
         url: /payment-service/v3/api-docs
-    server-url: http://localhost:${server.port:8080}
   api-docs:
     path: /v3/api-docs
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,metrics
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+  metrics:
+    distribution:
+      percentiles-histogram:
+        '[http.server.requests]': true
+  observations:
+    key-values:
+      application: ${spring.application.name}
+      service: api-gateway
+  tracing:
+    sampling:
+      probability: 1.0
+  otlp:
+    tracing:
+      endpoint: ${TEMPO_ENDPOINT:http://tempo:4318/v1/traces}

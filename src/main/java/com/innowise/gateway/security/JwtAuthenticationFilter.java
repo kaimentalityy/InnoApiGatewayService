@@ -60,8 +60,7 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
             return exchange.getResponse().setComplete();
         }
 
-        String authHeader1 = exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
-        String token = authHeader1.substring(7);
+        String token = authHeader.substring(7);
 
         return jwtValidator.validateAndGetClaims(token)
                 .flatMap(claims -> {

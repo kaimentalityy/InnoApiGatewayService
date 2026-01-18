@@ -1,0 +1,72 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    cluster: 'docker-compose'
+    environment: 'development'
+
+scrape_configs:
+  
+  - job_name: 'api-gateway'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['api-gateway:8080']
+        labels:
+          service: 'api-gateway'
+          application: 'inno-api-gateway'
+
+  
+  - job_name: 'auth-service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['auth-service:8081']
+        labels:
+          service: 'auth-service'
+          application: 'inno-auth-service'
+
+  
+  - job_name: 'user-service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['user-service:8082']
+        labels:
+          service: 'user-service'
+          application: 'inno-user-service'
+
+  
+  - job_name: 'order-service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['order-service:8086']
+        labels:
+          service: 'order-service'
+          application: 'inno-order-service'
+
+  
+  - job_name: 'payment-service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['payment-service:8087']
+        labels:
+          service: 'payment-service'
+          application: 'inno-payment-service'
+
+  
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9091']
+
+  
+  - job_name: 'loki'
+    static_configs:
+      - targets: ['loki:3100']
+
+  
+  - job_name: 'tempo'
+    static_configs:
+      - targets: ['tempo:3200']
+
+  
+  - job_name: 'grafana'
+    static_configs:
+      - targets: ['grafana:3000']
