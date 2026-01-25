@@ -4,24 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7135a0cd-6705-4616-9eb7-a2074e53755a" name="Changes" comment="fixed dotenv file for new services, added kafka and fixed issues in security config">
-      <change afterPath="$PROJECT_DIR$/.idea/checkstyle-idea.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/monitoring/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/monitoring/grafana/dashboards/microservices-monitoring.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/monitoring/grafana/provisioning/dashboards/dashboards.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/monitoring/grafana/provisioning/datasources/datasources.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/monitoring/loki/loki-config.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/monitoring/prometheus/prometheus.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/monitoring/tempo/tempo.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/innowise/gateway/config/MetricsConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
+    <list default="true" id="7135a0cd-6705-4616-9eb7-a2074e53755a" name="Changes" comment="fixed service for better work with monitoring and fixed issues for frontend">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/innowise/gateway/filter/GlobalMetricsFilter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/innowise/gateway/filter/LoggingFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/monitoring/tempo/tempo.yml" beforeDir="false" afterPath="$PROJECT_DIR$/monitoring/tempo/tempo.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/innowise/gateway/security/JwtAuthenticationFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/innowise/gateway/security/JwtAuthenticationFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/innowise/gateway/util/JwtValidator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/innowise/gateway/util/JwtValidator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -69,42 +60,42 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Docker.docker-compose.yml.order-service: Compose Deployment.executor&quot;: &quot;Run&quot;,
-    &quot;Docker.docker-compose.yml.postgres_order: Compose Deployment.executor&quot;: &quot;Run&quot;,
-    &quot;Maven.InnoApiGatewayService [clean,compile].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.InnoApiGatewayService [clean,package].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.InnoApiGatewayService [clean].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.InnoApiGatewayService [install].executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
-    &quot;Spring Boot.InnoGatewayApplication.executor&quot;: &quot;Run&quot;,
-    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;tasks/GTW-0&quot;,
-    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/kai/IdeaProjects/InnoProjects&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;onboarding.tips.debug.path&quot;: &quot;/home/kai/IdeaProjects/InnoApiGatewayService/src/main/java/com/innowise/Main.java&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Docker.docker-compose.yml.order-service: Compose Deployment.executor": "Run",
+    "Docker.docker-compose.yml.postgres_order: Compose Deployment.executor": "Run",
+    "Maven.InnoApiGatewayService [clean,compile].executor": "Run",
+    "Maven.InnoApiGatewayService [clean,package].executor": "Run",
+    "Maven.InnoApiGatewayService [clean].executor": "Run",
+    "Maven.InnoApiGatewayService [install].executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "Spring Boot.InnoGatewayApplication.executor": "Run",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "git-widget-placeholder": "#2 on tasks/GTW-0",
+    "junie.onboarding.icon.badge.shown": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/home/kai/IdeaProjects/InnoProjects/InnoFrontend",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "onboarding.tips.debug.path": "/home/kai/IdeaProjects/InnoApiGatewayService/src/main/java/com/innowise/Main.java",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "to.speed.mode.migration.done": "true",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunAnythingCache">
     <option name="myCommands">
       <command value="mvn clean" />
@@ -162,8 +153,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-30f59d01ecdd-26cb7f24e5b0-intellij.indexing.shared.core-IU-253.29346.240" />
-        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-IU-253.29346.240" />
+        <option value="bundled-jdk-30f59d01ecdd-2fc7cc6b9a17-intellij.indexing.shared.core-IU-253.30387.90" />
+        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-IU-253.30387.90" />
       </set>
     </attachedChunks>
   </component>
@@ -265,7 +256,26 @@
       <workItem from="1768655952511" duration="7794000" />
       <workItem from="1768753305745" duration="2000" />
       <workItem from="1768760965089" duration="608000" />
-      <workItem from="1768766199709" duration="3542000" />
+      <workItem from="1768766199709" duration="3636000" />
+      <workItem from="1768774664534" duration="44000" />
+      <workItem from="1768836242643" duration="2213000" />
+      <workItem from="1768897257198" duration="1030000" />
+      <workItem from="1768900471882" duration="4592000" />
+      <workItem from="1768919919030" duration="5000" />
+      <workItem from="1768921982195" duration="359000" />
+      <workItem from="1768922461993" duration="660000" />
+      <workItem from="1768923151414" duration="5582000" />
+      <workItem from="1769083160007" duration="147000" />
+      <workItem from="1769104765661" duration="610000" />
+      <workItem from="1769106034411" duration="4889000" />
+      <workItem from="1769186446813" duration="3000" />
+      <workItem from="1769187420613" duration="75000" />
+      <workItem from="1769247608049" duration="4832000" />
+      <workItem from="1769259259297" duration="15000" />
+      <workItem from="1769279960030" duration="152000" />
+      <workItem from="1769281564845" duration="2051000" />
+      <workItem from="1769284799566" duration="9167000" />
+      <workItem from="1769345559992" duration="4269000" />
     </task>
     <task id="LOCAL-00001" summary="added basic gateway implementation with error handling, security config, JwtValidator and JwtAuthenticationFilter">
       <option name="closed" value="true" />
@@ -291,7 +301,15 @@
       <option name="project" value="LOCAL" />
       <updated>1762969028934</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="fixed monitoring">
+      <option name="closed" value="true" />
+      <created>1768770669369</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1768770669369</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -312,7 +330,9 @@
     <MESSAGE value="added basic gateway implementation with error handling, security config, JwtValidator and JwtAuthenticationFilter" />
     <MESSAGE value="added single docker compose files, .env for every service and fixed GatewayConfig for registration flow" />
     <MESSAGE value="fixed dotenv file for new services, added kafka and fixed issues in security config" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed dotenv file for new services, added kafka and fixed issues in security config" />
+    <MESSAGE value="fixed monitoring" />
+    <MESSAGE value="fixed service for better work with monitoring and fixed issues for frontend" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed service for better work with monitoring and fixed issues for frontend" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -48,7 +48,7 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
 
         if (path.contains("/auth/login") || path.contains("/auth/register") || path.contains("/auth/refresh")
                 || path.contains("/v3/api-docs") || path.contains("/swagger-ui") || path.contains("/webjars")
-                || path.contains("/swagger-resources")) {
+                || path.contains("/swagger-resources") || path.contains("/api/items")) {
             log.info("JwtAuthenticationFilter - Skipping authentication for public path: {}", path);
             return chain.filter(exchange);
         }

@@ -3,6 +3,7 @@ package com.innowise.gateway.util;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import io.micrometer.core.instrument.Counter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
@@ -19,9 +20,18 @@ import java.nio.charset.StandardCharsets;
 public class JwtValidator {
 
     private final SecretKey key;
+    private final Counter jwtValidationAttemptsCounter;
+    private final Counter jwtValidationSuccessCounter;
+    private final Counter jwtValidationFailureCounter;
 
-    public JwtValidator(@Value("${JWT_SECRET}") String secret) {
+    public JwtValidator(@Value("${JWT_SECRET}") String secret,
+            Counter jwtValidationAttemptsCounter,
+            Counter jwtValidationSuccessCounter,
+            Counter jwtValidationFailureCounter) {
         this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+        this.jwtValidationAttemptsCounter = jwtValidationAttemptsCounter;
+        this.jwtValidationSuccessCounter = jwtValidationSuccessCounter;
+        this.jwtValidationFailureCounter = jwtValidationFailureCounter;
     }
 
     /**
@@ -32,11 +42,21 @@ public class JwtValidator {
      *         invalid
      */
     public Mono<Claims> validateAndGetClaims(String token) {
-        return Mono.fromCallable(() -> Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(token)
-                .getBody());
+        return Mono.fromCallable(() -> {
+            jwtValidationAttemptsCounter.increment();
+            try {
+                Claims claims = Jwts.parserBuilder()
+                        .setSigningKey(key)
+                        .build()
+                        .parseClaimsJws(token)
+                        .getBody();
+                jwtValidationSuccessCounter.increment();
+                return claims;
+            } catch (Exception e) {
+                jwtValidationFailureCounter.increment();
+                throw e;
+            }
+        });
     }
 
     /**
