@@ -5,14 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7135a0cd-6705-4616-9eb7-a2074e53755a" name="Changes" comment="fixed service for better work with monitoring and fixed issues for frontend">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/innowise/gateway/filter/GlobalMetricsFilter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/innowise/gateway/filter/LoggingFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/monitoring/tempo/tempo.yml" beforeDir="false" afterPath="$PROJECT_DIR$/monitoring/tempo/tempo.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/innowise/gateway/security/JwtAuthenticationFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/innowise/gateway/security/JwtAuthenticationFilter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/innowise/gateway/util/JwtValidator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/innowise/gateway/util/JwtValidator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/innowise/gateway/config/GatewaySecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/innowise/gateway/config/GatewaySecurityConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -52,6 +48,10 @@
   <component name="KubernetesApiProvider">{
   &quot;isMigrated&quot;: true
 }</component>
+  <component name="McpProjectServerCommands">
+    <commands />
+    <urls />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
 }</component>
@@ -60,42 +60,43 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Docker.docker-compose.yml.order-service: Compose Deployment.executor": "Run",
-    "Docker.docker-compose.yml.postgres_order: Compose Deployment.executor": "Run",
-    "Maven.InnoApiGatewayService [clean,compile].executor": "Run",
-    "Maven.InnoApiGatewayService [clean,package].executor": "Run",
-    "Maven.InnoApiGatewayService [clean].executor": "Run",
-    "Maven.InnoApiGatewayService [install].executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "Spring Boot.InnoGatewayApplication.executor": "Run",
-    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "#2 on tasks/GTW-0",
-    "junie.onboarding.icon.badge.shown": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/home/kai/IdeaProjects/InnoProjects/InnoFrontend",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "onboarding.tips.debug.path": "/home/kai/IdeaProjects/InnoApiGatewayService/src/main/java/com/innowise/Main.java",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "to.speed.mode.migration.done": "true",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Docker.docker-compose.yml.order-service: Compose Deployment.executor&quot;: &quot;Run&quot;,
+    &quot;Docker.docker-compose.yml.postgres_order: Compose Deployment.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.InnoApiGatewayService [clean,compile].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.InnoApiGatewayService [clean,package].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.InnoApiGatewayService [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.InnoApiGatewayService [install].executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;Spring Boot.InnoGatewayApplication.executor&quot;: &quot;Run&quot;,
+    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;#2 on tasks/GTW-0&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/kai/IdeaProjects/InnoProjects/InnoFrontend&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;onboarding.tips.debug.path&quot;: &quot;/home/kai/IdeaProjects/InnoApiGatewayService/src/main/java/com/innowise/Main.java&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunAnythingCache">
     <option name="myCommands">
       <command value="mvn clean" />
@@ -275,7 +276,42 @@
       <workItem from="1769279960030" duration="152000" />
       <workItem from="1769281564845" duration="2051000" />
       <workItem from="1769284799566" duration="9167000" />
-      <workItem from="1769345559992" duration="4269000" />
+      <workItem from="1769345559992" duration="5140000" />
+      <workItem from="1769354239609" duration="188000" />
+      <workItem from="1769611754970" duration="3748000" />
+      <workItem from="1769620813223" duration="458000" />
+      <workItem from="1769622214379" duration="262000" />
+      <workItem from="1769622613048" duration="905000" />
+      <workItem from="1769685976486" duration="608000" />
+      <workItem from="1769686765466" duration="3000" />
+      <workItem from="1770021319232" duration="335000" />
+      <workItem from="1770030496518" duration="367000" />
+      <workItem from="1770032424936" duration="2753000" />
+      <workItem from="1770132421759" duration="2710000" />
+      <workItem from="1770137633703" duration="383000" />
+      <workItem from="1770210411541" duration="1950000" />
+      <workItem from="1770213617780" duration="111000" />
+      <workItem from="1770213853328" duration="999000" />
+      <workItem from="1770215295260" duration="275000" />
+      <workItem from="1770216353173" duration="2106000" />
+      <workItem from="1770227991559" duration="32000" />
+      <workItem from="1770228463712" duration="27000" />
+      <workItem from="1770229591590" duration="2990000" />
+      <workItem from="1770232884058" duration="1354000" />
+      <workItem from="1770242199751" duration="710000" />
+      <workItem from="1770386236979" duration="31000" />
+      <workItem from="1770465190057" duration="294000" />
+      <workItem from="1770976630815" duration="6069000" />
+      <workItem from="1771084525231" duration="439000" />
+      <workItem from="1771085589048" duration="1953000" />
+      <workItem from="1771102813291" duration="1279000" />
+      <workItem from="1771286954447" duration="1628000" />
+      <workItem from="1771332218617" duration="485000" />
+      <workItem from="1771332737649" duration="1422000" />
+      <workItem from="1771359766860" duration="6255000" />
+      <workItem from="1771443847144" duration="2079000" />
+      <workItem from="1771488162514" duration="6392000" />
+      <workItem from="1771540695779" duration="6293000" />
     </task>
     <task id="LOCAL-00001" summary="added basic gateway implementation with error handling, security config, JwtValidator and JwtAuthenticationFilter">
       <option name="closed" value="true" />
@@ -309,7 +345,15 @@
       <option name="project" value="LOCAL" />
       <updated>1768770669369</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="fixed service for better work with monitoring and fixed issues for frontend">
+      <option name="closed" value="true" />
+      <created>1769352056520</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1769352056520</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

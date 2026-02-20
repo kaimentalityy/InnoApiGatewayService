@@ -73,11 +73,7 @@ services:
       USER_SERVICE_URI: ${USER_SERVICE_URI}
       ORDER_SERVICE_URI: ${ORDER_SERVICE_URI}
       PAYMENT_SERVICE_URI: ${PAYMENT_SERVICE_URI}
-      JWT_SECRET: ${JWT_SECRET}
-      JWT_EXPIRATION: ${JWT_EXPIRATION}
-      JWT_HEADER: ${JWT_HEADER}
-      JWT_TOKEN_PREFIX: ${JWT_TOKEN_PREFIX}
-      JWT_ROLE_PREFIX: ${JWT_ROLE_PREFIX}
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: ${KEYCLOAK_ISSUER_URI}
       KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_BOOTSTRAP_SERVERS}
 
       RANDOM_API_BASE_URL: ${RANDOM_API_BASE_URL}
@@ -108,21 +104,21 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://${AUTH_DB_HOST}:${AUTH_DB_PORT}/${AUTH_DB_NAME}
       SPRING_DATASOURCE_USERNAME: ${AUTH_DB_USERNAME}
       SPRING_DATASOURCE_PASSWORD: ${AUTH_DB_PASSWORD}
-      JWT_SECRET: ${JWT_SECRET}
-      JWT_EXPIRATION: ${JWT_EXPIRATION}
-      JWT_HEADER: ${JWT_HEADER}
-      JWT_TOKEN_PREFIX: ${JWT_TOKEN_PREFIX}
-      JWT_ROLE_PREFIX: ${JWT_ROLE_PREFIX}
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: ${KEYCLOAK_ISSUER_URI}
+      KEYCLOAK_SERVER_URL: http://keycloak:8080
+      KEYCLOAK_REALM: ${KEYCLOAK_REALM}
+      KEYCLOAK_CLIENT_ID: ${KEYCLOAK_CLIENT_ID}
+      KEYCLOAK_CLIENT_SECRET: ${KEYCLOAK_CLIENT_SECRET}
+      KEYCLOAK_ADMIN_USERNAME: ${KEYCLOAK_ADMIN_USERNAME}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
       SERVER_PORT: ${AUTH_SERVICE_PORT:-8081}
       KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_BOOTSTRAP_SERVERS}
-      PASSWORD_HASH_ALGORITHM: ${PASSWORD_HASH_ALGORITHM}
-      PASSWORD_SALT_ALGORITHM: ${PASSWORD_SALT_ALGORITHM}
-      PASSWORD_SALT_LENGTH: ${PASSWORD_SALT_LENGTH}
-      PASSWORD_STRENGTH: ${PASSWORD_STRENGTH}
     depends_on:
       postgres_auth:
         condition: service_healthy
       kafka:
+        condition: service_healthy
+      keycloak:
         condition: service_healthy
     networks:
       - ${DOCKER_NETWORK_NAME:-innonetwork}
@@ -333,6 +329,61 @@ services:
     networks:
       - ${DOCKER_NETWORK_NAME:-innonetwork}
 
+  keycloak:
+    image: quay.io/keycloak/keycloak:25.0
+    container_name: keycloak
+    restart: always
+    env_file: .env
+    environment:
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN_USERNAME:-admin}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-admin}
+      KC_DB: postgres
+      KC_DB_URL_HOST: ${KEYCLOAK_DB_HOST:-postgres_keycloak}
+      KC_DB_URL_PORT: 5432
+      KC_DB_URL_DATABASE: ${KEYCLOAK_DB_NAME:-keycloak}
+      KC_DB_USERNAME: ${KEYCLOAK_DB_USERNAME:-keycloak}
+      KC_DB_PASSWORD: ${KEYCLOAK_DB_PASSWORD:-keycloak}
+      KC_HTTP_ENABLED: true
+      KC_HEALTH_ENABLED: true
+      KC_METRICS_ENABLED: true
+    ports:
+      - "${KEYCLOAK_PORT:-8088}:8080"
+    volumes:
+      - ./keycloak/realm-config:/opt/keycloak/data/import:ro
+    command: ["start-dev", "--import-realm"]
+    depends_on:
+      postgres_keycloak:
+        condition: service_healthy
+    networks:
+      - ${DOCKER_NETWORK_NAME:-innonetwork}
+    healthcheck:
+      test: [ "CMD", "bash", "-c", "exec 3<>/dev/tcp/127.0.0.1/9000 && echo -e 'GET /health/ready HTTP/1.1\\r\\nHost: localhost\\r\\nConnection: close\\r\\n\\r\\n' >&3 && cat <&3 | grep 'HTTP/1.1 200 OK' || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  postgres_keycloak:
+    image: postgres:15
+    container_name: postgres_keycloak
+    environment:
+      POSTGRES_DB: ${KEYCLOAK_DB_NAME:-keycloak}
+      POSTGRES_USER: ${KEYCLOAK_DB_USERNAME:-keycloak}
+      POSTGRES_PASSWORD: ${KEYCLOAK_DB_PASSWORD:-keycloak}
+    env_file: .env
+    ports:
+      - "${KEYCLOAK_DB_PORT:-5437}:5432"
+    volumes:
+      - postgres_keycloak_data:/var/lib/postgresql/data
+    networks:
+      - ${DOCKER_NETWORK_NAME:-innonetwork}
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${KEYCLOAK_DB_USERNAME:-keycloak} -d ${KEYCLOAK_DB_NAME:-keycloak}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: always
+
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
@@ -428,6 +479,7 @@ volumes:
   postgres_user_data:
   postgres_order_data:
   postgres_payment_data:
+  postgres_keycloak_data:
   kafka_data:
   mongo_data:
   minikube_data:

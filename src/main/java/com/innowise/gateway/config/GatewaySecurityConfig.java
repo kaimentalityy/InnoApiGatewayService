@@ -21,10 +21,18 @@ public class GatewaySecurityConfig {
                 return http
                                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
-                                .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
-                                .formLogin(ServerHttpSecurity.FormLoginSpec::disable)
                                 .authorizeExchange(exchanges -> exchanges
-                                                .anyExchange().permitAll())
+                                                .pathMatchers("/api/auth/**").permitAll()
+                                                .pathMatchers("/actuator/**").permitAll()
+                                                .pathMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html",
+                                                                "/webjars/**")
+                                                .permitAll()
+                                                .pathMatchers("/auth-service/**", "/user-service/**",
+                                                                "/order-service/**", "/payment-service/**")
+                                                .permitAll() // Swagger docs
+                                                .anyExchange().authenticated())
+                                .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> {
+                                }))
                                 .build();
         }
 
