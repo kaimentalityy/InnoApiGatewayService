@@ -4,11 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7135a0cd-6705-4616-9eb7-a2074e53755a" name="Changes" comment="fixed service for better work with monitoring and fixed issues for frontend">
+    <list default="true" id="7135a0cd-6705-4616-9eb7-a2074e53755a" name="Changes" comment="added keycloak">
       <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keycloak/realm-config/innowise-realm.json" beforeDir="false" afterPath="$PROJECT_DIR$/keycloak/realm-config/innowise-realm.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/innowise/gateway/config/GatewayConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/innowise/gateway/config/GatewayConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/innowise/gateway/config/GatewaySecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/innowise/gateway/config/GatewaySecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/innowise/gateway/config/SwaggerConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/innowise/gateway/config/SwaggerConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/innowise/gateway/security/JwtAuthenticationFilter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/innowise/gateway/util/JwtValidator.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -80,10 +85,10 @@
     &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
     &quot;Spring Boot.InnoGatewayApplication.executor&quot;: &quot;Run&quot;,
     &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;#2 on tasks/GTW-0&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;#3 on tasks/GTW-0&quot;,
     &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/kai/IdeaProjects/InnoProjects/InnoFrontend&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/kai/IdeaProjects/InnoProjects&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -94,6 +99,7 @@
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
     &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/var/lib/snapd/snap/intellij-idea-ultimate/730/plugins/javascript-plugin/jsLanguageServicesImpl/external&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
@@ -154,8 +160,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-30f59d01ecdd-2fc7cc6b9a17-intellij.indexing.shared.core-IU-253.30387.90" />
-        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-IU-253.30387.90" />
+        <option value="bundled-jdk-30f59d01ecdd-2fc7cc6b9a17-intellij.indexing.shared.core-IU-253.31033.145" />
+        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-IU-253.31033.145" />
       </set>
     </attachedChunks>
   </component>
@@ -311,7 +317,19 @@
       <workItem from="1771359766860" duration="6255000" />
       <workItem from="1771443847144" duration="2079000" />
       <workItem from="1771488162514" duration="6392000" />
-      <workItem from="1771540695779" duration="6293000" />
+      <workItem from="1771540695779" duration="6473000" />
+      <workItem from="1771711387880" duration="4108000" />
+      <workItem from="1771716687382" duration="45000" />
+      <workItem from="1771770542818" duration="32000" />
+      <workItem from="1771785938310" duration="538000" />
+      <workItem from="1771796054175" duration="157000" />
+      <workItem from="1771840930747" duration="3017000" />
+      <workItem from="1771847005985" duration="1314000" />
+      <workItem from="1771856221323" duration="2123000" />
+      <workItem from="1771862241956" duration="1617000" />
+      <workItem from="1771864056191" duration="2887000" />
+      <workItem from="1772013380093" duration="3031000" />
+      <workItem from="1772208869202" duration="1489000" />
     </task>
     <task id="LOCAL-00001" summary="added basic gateway implementation with error handling, security config, JwtValidator and JwtAuthenticationFilter">
       <option name="closed" value="true" />
@@ -353,7 +371,15 @@
       <option name="project" value="LOCAL" />
       <updated>1769352056520</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="added keycloak">
+      <option name="closed" value="true" />
+      <created>1771547808212</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1771547808212</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -376,7 +402,8 @@
     <MESSAGE value="fixed dotenv file for new services, added kafka and fixed issues in security config" />
     <MESSAGE value="fixed monitoring" />
     <MESSAGE value="fixed service for better work with monitoring and fixed issues for frontend" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed service for better work with monitoring and fixed issues for frontend" />
+    <MESSAGE value="added keycloak" />
+    <option name="LAST_COMMIT_MESSAGE" value="added keycloak" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

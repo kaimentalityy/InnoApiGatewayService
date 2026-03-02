@@ -9,6 +9,13 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsConfigurationSource;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 
+import org.springframework.security.oauth2.jwt.NimbusReactiveJwtDecoder;
+import org.springframework.security.oauth2.jwt.ReactiveJwtDecoder;
+import java.time.Duration;
+import org.springframework.security.oauth2.jwt.JwtTimestampValidator;
+import org.springframework.security.oauth2.core.OAuth2TokenValidator;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.beans.factory.annotation.Value;
 import java.util.Arrays;
 import java.util.List;
 
@@ -16,24 +23,39 @@ import java.util.List;
 @EnableWebFluxSecurity
 public class GatewaySecurityConfig {
 
+        @Value("${spring.security.oauth2.resourceserver.jwt.issuer-uri}")
+        private String issuerUri;
+
         @Bean
         public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
                 return http
                                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                                 .authorizeExchange(exchanges -> exchanges
-                                                .pathMatchers("/api/auth/**").permitAll()
                                                 .pathMatchers("/actuator/**").permitAll()
                                                 .pathMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html",
                                                                 "/webjars/**")
                                                 .permitAll()
-                                                .pathMatchers("/auth-service/**", "/user-service/**",
-                                                                "/order-service/**", "/payment-service/**")
-                                                .permitAll() // Swagger docs
+                                                .pathMatchers("/user-service/**", "/order-service/**",
+                                                                "/payment-service/**")
+                                                .permitAll()
+                                                .pathMatchers(org.springframework.http.HttpMethod.POST,
+                                                                "/api/users/register")
+                                                .permitAll()
+                                                .pathMatchers("/admin/**", "/realms/**", "/protocol/**").permitAll()
                                                 .anyExchange().authenticated())
-                                .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> {
-                                }))
+                                .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.jwtDecoder(jwtDecoder())))
                                 .build();
+        }
+
+        @Bean
+        public ReactiveJwtDecoder jwtDecoder() {
+                String jwkSetUri = issuerUri + "/protocol/openid-connect/certs";
+                NimbusReactiveJwtDecoder jwtDecoder = NimbusReactiveJwtDecoder.withJwkSetUri(jwkSetUri).build();
+                JwtTimestampValidator validator = new JwtTimestampValidator(Duration.ofSeconds(60));
+                jwtDecoder.setJwtValidator(validator);
+
+                return jwtDecoder;
         }
 
         @Bean

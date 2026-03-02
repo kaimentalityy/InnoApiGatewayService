@@ -6,7 +6,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: ${KEYCLOAK_ISSUER_URI:http://localhost:8088/realms/innowise-realm}
+          issuer-uri: ${KEYCLOAK_ISSUER_URI:http://keycloak:8080/realms/innowise-realm}
 
   cloud:
     gateway:
@@ -23,30 +23,15 @@ spring:
             allowedHeaders: "*"
             allowCredentials: true
       routes:
-        - id: auth-service
-          uri: ${AUTH_SERVICE_URI:http://auth-service:8081}
-          predicates:
-            - Path=/api/auth/**
-
         - id: user-service
           uri: ${USER_SERVICE_URI:http://user-service:8082}
           predicates:
-            - Path=/api/users/**
-            - Path=/api/cards/**
+            - Path=/api/users/**,/api/cards/**
 
         - id: order-service
           uri: ${ORDER_SERVICE_URI:http://order-service:8086}
           predicates:
-            - Path=/api/orders/**
-            - Path=/api/items/**
-            - Path=/api/order-items/**
-
-        - id: auth-service-swagger
-          uri: ${AUTH_SERVICE_URI:http://auth-service:8081}
-          predicates:
-            - Path=/auth-service/v3/api-docs/**
-          filters:
-            - RewritePath=/auth-service/(?<path>.*), /$\{path}
+            - Path=/api/orders/**,/api/items/**,/api/order-items/**
 
         - id: user-service-swagger
           uri: ${USER_SERVICE_URI:http://user-service:8082}
@@ -62,25 +47,16 @@ spring:
           filters:
             - RewritePath=/order-service/(?<path>.*), /$\{path}
 
-        - id: payment-service-swagger
-          uri: ${PAYMENT_SERVICE_URI:http://payment-service:8087}
-          predicates:
-            - Path=/payment-service/v3/api-docs/**
-          filters:
-            - RewritePath=/payment-service/(?<path>.*), /$\{path}
-
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
     urls:
-      - name: Auth Service
-        url: /auth-service/v3/api-docs
       - name: User Service
         url: /user-service/v3/api-docs
       - name: Order Service
         url: /order-service/v3/api-docs
-      - name: Payment Service
-        url: /payment-service/v3/api-docs
+    oauth:
+      clientId: innowise-client
   api-docs:
     path: /v3/api-docs
 
@@ -105,3 +81,8 @@ management:
   otlp:
     tracing:
       endpoint: ${TEMPO_ENDPOINT:http://tempo:4318/v1/traces}
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+    org.springframework.security.oauth2: DEBUG

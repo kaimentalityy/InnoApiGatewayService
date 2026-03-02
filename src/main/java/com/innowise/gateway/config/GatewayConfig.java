@@ -14,9 +14,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class GatewayConfig {
 
-    @Value("${AUTH_SERVICE_URI}")
-    private String authServiceUri;
-
     @Value("${USER_SERVICE_URI}")
     private String userServiceUri;
 
@@ -36,8 +33,6 @@ public class GatewayConfig {
                         .uri(orderServiceUri))
                 .route("user-service", r -> r.path("/api/users/**", "/api/cards/**")
                         .uri(userServiceUri))
-                .route("auth-service", r -> r.path("/api/auth/**")
-                        .uri(authServiceUri))
                 .route("swagger-ui", r -> r.path("/swagger-ui/**")
                         .filters(f -> f.rewritePath("/swagger-ui/(?<path>.*)", "/${path}"))
                         .uri("lb://inno-gateway"))
