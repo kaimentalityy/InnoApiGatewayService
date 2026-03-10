@@ -55,8 +55,15 @@ springdoc:
         url: /user-service/v3/api-docs
       - name: Order Service
         url: /order-service/v3/api-docs
+    config-parameters:
+      usePkceWithAuthorizationCodeGrant: true
+      clientId: innowise-client
+      appName: Innowise Gateway
     oauth:
       clientId: innowise-client
+      appName: Innowise Gateway
+      use-pkce-with-authorization-code-grant: true
+    display-request-duration: true
   api-docs:
     path: /v3/api-docs
 

@@ -14,7 +14,18 @@
         "id": "admin-role",
         "name": "admin",
         "description": "Administrator role with full access",
-        "composite": false,
+        "composite": true,
+        "composites": {
+          "client": {
+            "realm-management": [
+              "manage-users",
+              "view-users",
+              "query-users",
+              "view-realm",
+              "view-clients"
+            ]
+          }
+        },
         "clientRole": false,
         "containerId": "innowise-realm"
       },
@@ -47,6 +58,19 @@
       "realmRoles": [
         "admin"
       ]
+    },
+    {
+      "username": "service-account-innowise-client",
+      "enabled": true,
+      "serviceAccountClientId": "innowise-client",
+      "realmRoles": [
+        "admin"
+      ],
+      "clientRoles": {
+        "realm-management": [
+          "realm-admin"
+        ]
+      }
     }
   ],
   "clients": [
@@ -64,7 +88,10 @@
         "http://localhost:8081/*",
         "http://localhost:8082/*",
         "http://localhost:8086/*",
-        "http://localhost:8087/*"
+        "http://localhost:8087/*",
+        "http://localhost:8080/swagger-ui/oauth2-redirect.html",
+        "http://localhost:8082/swagger-ui/oauth2-redirect.html",
+        "http://localhost:8086/swagger-ui/oauth2-redirect.html"
       ],
       "webOrigins": [
         "+",
@@ -85,6 +112,7 @@
       "authorizationServicesEnabled": true,
       "fullScopeAllowed": true,
       "attributes": {
+        "pkce.code.challenge.method": "S256",
         "saml.assertion.signature": "false",
         "saml.multivalued.roles": "false",
         "saml.force.post.binding": "false",
