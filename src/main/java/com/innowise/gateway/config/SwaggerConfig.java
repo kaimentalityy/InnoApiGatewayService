@@ -11,9 +11,12 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Configuration;
-
+import org.springdoc.core.properties.SwaggerUiConfigParameters;
+import org.springdoc.core.properties.SwaggerUiConfigProperties;
 import java.util.List;
+import java.util.Map;
 
 @Configuration
 public class SwaggerConfig {
@@ -22,10 +25,11 @@ public class SwaggerConfig {
         private int serverPort;
 
         /**
-         * Browser-facing Keycloak token URL. Must use localhost (not the internal
-         * Docker hostname) because Swagger UI runs in the browser, not inside Docker.
-         * Injected via SWAGGER_KEYCLOAK_TOKEN_URL env var in Docker Compose.
+         * Browser-facing Keycloak authorization URL.
          */
+        @Value("${swagger.keycloak.auth-url:http://localhost:8088/realms/innowise-realm/protocol/openid-connect/auth}")
+        private String swaggerKeycloakAuthUrl;
+
         @Value("${swagger.keycloak.token-url:http://localhost:8088/realms/innowise-realm/protocol/openid-connect/token}")
         private String swaggerKeycloakTokenUrl;
 
@@ -42,16 +46,30 @@ public class SwaggerConfig {
                                                 .addSecuritySchemes("keycloak",
                                                                 new SecurityScheme()
                                                                                 .type(SecurityScheme.Type.OAUTH2)
-                                                                                .description("Authenticate via Keycloak (Resource Owner Password Credentials flow)")
+                                                                                .description("Authenticate via Keycloak (Authorization Code flow)")
                                                                                 .flows(new OAuthFlows()
-                                                                                                .password(new OAuthFlow()
-                                                                                                                .tokenUrl(swaggerKeycloakTokenUrl)
-                                                                                                                .scopes(new Scopes()
-                                                                                                                                .addString("openid",
-                                                                                                                                                "OpenID Connect scope")
-                                                                                                                                .addString("profile",
-                                                                                                                                                "User profile scope")
-                                                                                                                                .addString("email",
-                                                                                                                                                "User email scope"))))));
+                                                                                                .authorizationCode(
+                                                                                                                new OAuthFlow()
+                                                                                                                                .authorizationUrl(
+                                                                                                                                                swaggerKeycloakAuthUrl)
+                                                                                                                                .tokenUrl(swaggerKeycloakTokenUrl)
+                                                                                                                                .scopes(new Scopes()
+                                                                                                                                                .addString("openid",
+                                                                                                                                                                "OpenID Connect scope")
+                                                                                                                                                .addString("profile",
+                                                                                                                                                                "User profile scope")
+                                                                                                                                                .addString("email",
+                                                                                                                                                                "User email scope"))))));
+        }
+
+        @Primary
+        @Bean
+        public SwaggerUiConfigParameters swaggerUiConfigParameters(SwaggerUiConfigProperties properties) {
+                SwaggerUiConfigParameters parameters = new SwaggerUiConfigParameters(properties);
+                Map<String, Object> config = parameters.getConfigParameters();
+                config.put("usePkceWithAuthorizationCodeGrant", true);
+                config.put("clientId", "innowise-client");
+                config.put("clientSecret", "innowise-secret");
+                return parameters;
         }
 }

@@ -39,7 +39,6 @@ class GlobalGatewayExceptionHandlerTest {
         StepVerifier.create(handler.filter(exchange, chain))
                 .verifyComplete();
 
-        // Response should not be manually set when no error occurs
         assertNull(exchange.getResponse().getStatusCode());
     }
 
@@ -60,9 +59,9 @@ class GlobalGatewayExceptionHandlerTest {
     void filter_committedResponse_rethrowsError() {
         MockServerHttpRequest request = MockServerHttpRequest.get("/api/payments").build();
         MockServerWebExchange exchange = MockServerWebExchange.from(request);
-        // Commit the response so isCommitted() returns true
+        
         exchange.getResponse().setStatusCode(HttpStatus.OK);
-        exchange.getResponse().writeWith(Mono.empty()).subscribe();
+        exchange.getResponse().setComplete().block();
 
         RuntimeException cause = new RuntimeException("already committed");
         when(chain.filter(any())).thenReturn(Mono.error(cause));

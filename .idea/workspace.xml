@@ -5,16 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7135a0cd-6705-4616-9eb7-a2074e53755a" name="Changes" comment="added keycloak">
-      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/innowise/gateway/InnoGatewayApplicationTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/innowise/gateway/config/GatewayConfigTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/innowise/gateway/config/MetricsConfigTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/innowise/gateway/config/SwaggerConfigTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/keycloak/realm-config/innowise-realm.json" beforeDir="false" afterPath="$PROJECT_DIR$/keycloak/realm-config/innowise-realm.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/innowise/gateway/config/GatewayConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/innowise/gateway/config/GatewayConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/innowise/gateway/config/GatewaySecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/innowise/gateway/config/GatewaySecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/innowise/gateway/config/SwaggerConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/innowise/gateway/config/SwaggerConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/innowise/gateway/security/JwtAuthenticationFilter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/innowise/gateway/util/JwtValidator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/innowise/gateway/exception/GlobalGatewayExceptionHandlerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/innowise/gateway/exception/GlobalGatewayExceptionHandlerTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,6 +35,7 @@
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
@@ -71,6 +71,7 @@
     &quot;Docker.docker-compose.yml.postgres_order: Compose Deployment.executor&quot;: &quot;Run&quot;,
     &quot;Maven.InnoApiGatewayService [clean,compile].executor&quot;: &quot;Run&quot;,
     &quot;Maven.InnoApiGatewayService [clean,package].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.InnoApiGatewayService [clean,test...].executor&quot;: &quot;Run&quot;,
     &quot;Maven.InnoApiGatewayService [clean].executor&quot;: &quot;Run&quot;,
     &quot;Maven.InnoApiGatewayService [install].executor&quot;: &quot;Run&quot;,
     &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
@@ -85,7 +86,7 @@
     &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
     &quot;Spring Boot.InnoGatewayApplication.executor&quot;: &quot;Run&quot;,
     &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;#3 on tasks/GTW-0&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;#4 on tasks/GTW-0&quot;,
     &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;/home/kai/IdeaProjects/InnoProjects&quot;,
@@ -108,6 +109,7 @@
       <command value="mvn clean" />
       <command value="mvn clean compile" />
       <command value="mvn install" />
+      <command value="mvn clean test jacoco:report" />
     </option>
   </component>
   <component name="RunManager" selected="Docker.docker-compose.yml.postgres_order: Compose Deployment">
@@ -330,6 +332,12 @@
       <workItem from="1771864056191" duration="2887000" />
       <workItem from="1772013380093" duration="3031000" />
       <workItem from="1772208869202" duration="1489000" />
+      <workItem from="1772415569791" duration="568000" />
+      <workItem from="1772435942361" duration="608000" />
+      <workItem from="1772455036823" duration="139000" />
+      <workItem from="1772493403424" duration="33000" />
+      <workItem from="1772995086426" duration="3507000" />
+      <workItem from="1773009352175" duration="18000" />
     </task>
     <task id="LOCAL-00001" summary="added basic gateway implementation with error handling, security config, JwtValidator and JwtAuthenticationFilter">
       <option name="closed" value="true" />
@@ -379,7 +387,23 @@
       <option name="project" value="LOCAL" />
       <updated>1771547808212</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="added keycloak">
+      <option name="closed" value="true" />
+      <created>1772415654280</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1772415654280</updated>
+    </task>
+    <task id="LOCAL-00008" summary="added keycloak">
+      <option name="closed" value="true" />
+      <created>1772415711933</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1772415711933</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
